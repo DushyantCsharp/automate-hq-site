@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Theme ---- */
+:root {
+  --bg: #0b0d13;
+  --card: #0f1420;
+}
+
+html, body {
+  height: 100%;
+  background:
+    radial-gradient(1200px 600px at 70% -10%, rgba(74,110,255,.15), transparent 50%),
+    radial-gradient(800px 400px at 20% 0%, rgba(36,62,204,.2), transparent 50%),
+    var(--bg);
+  color: white;
+}
+
+.container-pad { @apply mx-auto max-w-6xl px-6; }
+
+.card {
+  @apply rounded-2xl backdrop-blur border border-white/5 shadow-[0_0_0_1px_rgba(255,255,255,0.02)];
+  background-color: rgb(15 20 32 / 0.9);
+  background-color: color-mix(in srgb, var(--card) 90%, transparent);
+}
+
+.h1 { @apply text-4xl md:text-6xl font-semibold tracking-tight; }
+.h2 { @apply text-2xl md:text-3xl font-semibold; }
+.badge { @apply inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-sm text-white/80 border border-white/10; }
+a { @apply transition; }
