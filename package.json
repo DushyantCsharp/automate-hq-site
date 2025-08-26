@@ -7,9 +7,12 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "engines": { "node": ">=18.17" },
+  "engines": {
+    "node": ">=18.17"
+  },
   "dependencies": {
     "next": "14.x",
+    "nodemailer": "^7.0.5",
     "react": "18.x",
     "react-dom": "18.x"
   },
