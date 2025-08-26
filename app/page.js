@@ -1,138 +1,203 @@
 // app/page.js
-import HeaderClient from "./HeaderClient";
-import CalendlyButton from "./CalendlyButton";
+import Header from "@/components/header";
+import Footer from "@/components/Footer";
+import BookCall from "@/components/BookCall";
 
-// --- Inline Footer (server component) ---
-function Footer() {
-  return (
-    <footer className="mt-16 md:mt-20 border-t border-white/5">
-      <div className="container-pad py-8 md:py-10 text-sm text-white/60">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>© {new Date().getFullYear()} Automate HQ. All rights reserved.</div>
-          <div className="flex items-center gap-4">
-            <a href="#services" className="hover:text-white">Services</a>
-            <a href="#systems" className="hover:text-white">Systems</a>
-            <a href="#process" className="hover:text-white">Process</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-const headline = "I build world-class custom software to power your business.";
+/* === COPY: Full-stack, serious, professional === */
+const headline = "Full-stack product engineering for complex, high-stakes software.";
 const subline =
-  "Full-Stack Developer | Python, JavaScript (React), C#, C++ | Builder of Scalable, High-Performance Systems | CS50x (Harvard University). I deliver high-performance, scalable systems from backend architecture to sleek frontends — clean code, problem-solving, and real business results.";
+  "We design, build, and operate end-to-end systems — from polished React/Next.js interfaces and mobile apps to domain-driven back-ends, cloud, data, and AI. We prioritise reliability, security, and maintainability so your product scales without drama.";
 
-export default function Page() {
+const pillars = [
+  { title: "Architecture & Scale",
+    desc: "Domain-driven design, modular monoliths or microservices, event-driven patterns, caching, queues, and horizontal scaling when it matters." },
+  { title: "Reliability & Observability",
+    desc: "SLOs, tracing, metrics, and logs via OpenTelemetry; zero-downtime releases; guardrails and rollbacks with feature flags." },
+  { title: "Security & Compliance",
+    desc: "OWASP practices, least-privilege IAM, secrets management, encryption in transit/at rest, POPIA/SOC 2 readiness, audit trails." },
+];
+
+const capabilities = [
+  {
+    title: "Front-end Engineering",
+    points: [
+      "Next.js/React, TypeScript, SSR/ISR, accessibility (WCAG), Web Vitals",
+      "Design systems, theming, motion, performance budgets",
+      "Mobile: React Native / Ionic, offline-first, deep links",
+    ],
+  },
+  {
+    title: "Back-end & APIs",
+    points: [
+      "Node.js/Nest/Express or Go; REST/GraphQL gRPC; event-driven",
+      "Postgres/SQL Server, Redis, job queues; schema versioning & migrations",
+      "AuthN/Z, rate limiting, idempotency, multi-tenancy",
+    ],
+  },
+  {
+    title: "Cloud & DevOps",
+    points: [
+      "AWS/Azure/GCP; Docker/Kubernetes; IaC with Terraform",
+      "GitHub Actions CI/CD, trunk-based dev, preview envs",
+      "Cost controls, autoscaling, blue-green/canary deploys",
+    ],
+  },
+  {
+    title: "Data & Integrations",
+    points: [
+      "ETL/ELT pipelines, warehousing, CDC, reporting APIs",
+      "Jira/Confluence/WhatsApp/Email/Payments integrations",
+      "Event buses (Kafka/RabbitMQ/SQS), retries & DLQs",
+    ],
+  },
+  {
+    title: "AI & Automation",
+    points: [
+      "Task-specific agents with guardrails and evaluations",
+      "Retrieval pipelines, prompt/test harnesses, monitoring",
+      "UiPath workflows, human-in-the-loop, auditability",
+    ],
+  },
+  {
+    title: "Quality & Hardening",
+    points: [
+      "Jest/Playwright/Cypress, contract tests, load tests (k6)",
+      "Static analysis, linting, commit hooks, code owners",
+      "Runbooks, on-call readiness, DR/RPO/RTO planning",
+    ],
+  },
+];
+
+const process = [
+  { t: "1. Discovery & Scope", d: "Align on outcomes, constraints, risks, and success metrics. Produce a concrete plan and budget." },
+  { t: "2. Solution Architecture", d: "Choose patterns and platforms deliberately. Threat model, data model, and target SLOs defined." },
+  { t: "3. Design & Prototype", d: "Lock critical UX paths; build thin vertical slices to de-risk integration and performance." },
+  { t: "4. Build & Iterate", d: "Short cycles, code reviews, CI/CD, telemetry. Weekly demos with measurable progress." },
+  { t: "5. Hardening & Compliance", d: "Performance tuning, security fixes, test coverage, load and chaos checks, release checklists." },
+  { t: "6. Launch & Operate", d: "Zero-downtime cutover, observability dashboards, runbooks, training, and clean handover." },
+];
+
+const stack = [
+  "React", "Next.js", "TypeScript", "Node.js", "Go", "Python",
+  "Postgres", "SQL Server", "Redis", "Kafka", "SQS", "gRPC",
+  "Docker", "Kubernetes", "Terraform", "AWS", "Azure", "GCP",
+  "OpenTelemetry", "Prometheus", "Grafana", "Jest", "Playwright", "k6"
+];
+
+export default function Page(){
   return (
     <>
-      {/* Mobile-ready header */}
-      <HeaderClient />
+      <Header />
 
-      {/* Hero */}
-      <section className="container-pad pt-12 md:pt-20">
-        <div className="card p-5 md:p-10 relative overflow-hidden">
-          <div className="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-brand-600/20 blur-3xl" />
-          <span className="badge mb-3 md:mb-4">Automate HQ</span>
+      {/* HERO */}
+      <section className="container-pad pt-12 md:pt-16">
+        <div className="card p-8 md:p-12 hero">
+          <div className="glow glow-a" />
+          <div className="glow glow-b" />
+          <span className="badge mb-4">Automate-HQ</span>
           <h1 className="h1">{headline}</h1>
-          <p className="mt-3 md:mt-4 text-base md:text-lg text-white/80 max-w-3xl">{subline}</p>
-          <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-            <CalendlyButton className="w-full sm:w-auto rounded-xl bg-brand-600 hover:bg-brand-500 transition px-5 py-3 font-medium text-center">
-              Book a Call
-            </CalendlyButton>
-            <a
-              href="#services"
-              className="w-full sm:w-auto rounded-xl border border-white/10 hover:border-white/20 px-5 py-3 font-medium text-center"
-            >
-              Explore Services
-            </a>
+          <p className="lead mt-4 max-w-3xl">{subline}</p>
+
+          {/* Pillars */}
+          <div className="grid md:grid-cols-3 gap-4 md:gap-6 mt-8">
+            {pillars.map((v)=>(
+              <div key={v.title} className="card-contrast p-5 md:p-6 lift">
+                <div className="h3 mb-1">{v.title}</div>
+                <p className="text-white/75">{v.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Calendly popup */}
+          <div className="mt-8">
+            <BookCall />
           </div>
         </div>
       </section>
 
-      {/* Services */}
-      <section id="services" className="container-pad mt-12 md:mt-16">
-        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-          <div className="card p-5 md:p-6">
-            <h3 className="h2">AI & Automation</h3>
-            <p className="mt-3 text-white/70">
-              Intelligent chatbots, helpdesk routing, NLP classification, face authentication,
-              workflow automation, and data pipelines that save time and money.
-            </p>
-            <ul className="mt-4 space-y-2 text-white/80">
-              <li>• Chatbots & ticket triage</li>
-              <li>• Face verification & identity flows</li>
-              <li>• ETL/data automation</li>
-            </ul>
-          </div>
-          <div className="card p-5 md:p-6">
-            <h3 className="h2">Web & Mobile Apps</h3>
-            <p className="mt-3 text-white/70">
-              Modern, performant apps built with React, Next.js, Ionic, and Flutter, backed by
-              secure APIs and databases.
-            </p>
-            <ul className="mt-4 space-y-2 text-white/80">
-              <li>• Next.js / React frontends</li>
-              <li>• Ionic/Flutter mobile apps</li>
-              <li>• Secure APIs & auth</li>
-            </ul>
-          </div>
-          <div className="card p-5 md:p-6">
-            <h3 className="h2">Enterprise & FinTech</h3>
-            <p className="mt-3 text-white/70">
-              High-reliability systems: dashboards, integrations, and trading/analytics tools with
-              risk controls and backtesting.
-            </p>
-            <ul className="mt-4 space-y-2 text-white/80">
-              <li>• SQL Server & integrations</li>
-              <li>• Dashboards & reporting</li>
-              <li>• Trading bots & backtesting</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Systems */}
-      <section id="systems" className="container-pad mt-12 md:mt-16">
-        <div className="card p-5 md:p-10">
-          <h2 className="h2">Systems I Can Build (and have built similar)</h2>
-          <p className="mt-3 text-white/70 max-w-3xl">
-            I respect confidentiality. I don’t list client projects publicly, but here are categories of systems
-            I’ve delivered — or can deliver — end-to-end:
-          </p>
-          <div className="mt-6 grid md:grid-cols-2 gap-6">
-            <ul className="space-y-2 text-white/80">
-              <li>• KYC/Identity verification pipelines (face match, liveness, audit logs)</li>
-              <li>• Collections & CRM automations (AI call/email workflows, ticketing)</li>
-              <li>• Internal analytics dashboards (real-time metrics, role-based access)</li>
-              <li>• Custom CMS/portal apps (multi-tenant, secure auth, file workflows)</li>
-              <li>• Trading bots with risk controls (backtests, live automation)</li>
-            </ul>
-            <ul className="space-y-2 text-white/80">
-              <li>• Data ingestion & ETL services (SQL Server, APIs, batch/stream)</li>
-              <li>• Mobile apps (Ionic/React, Flutter) with modern UI/UX</li>
-              <li>• Customer chatbots & routing (NLP, knowledge bases)</li>
-              <li>• Document processing (OCR, validation, audit readiness)</li>
-              <li>• Secure APIs & integrations (payment, email, identity, 3rd-party)</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Process */}
-      <section id="process" className="container-pad mt-12 md:mt-16 mb-8 md:mb-10">
-        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-          {[
-            ["1. Discover", "We align on goals, constraints, timeline, and budget. You’ll get a clear, practical plan."],
-            ["2. Design", "Architecture, data model, and UX flows. I optimize for performance, security, and maintainability."],
-            ["3. Build & Ship", "Iterative delivery with demos. Clean, well-tested code, smooth handover, and optional support retainer."]
-          ].map(([title, desc]) => (
-            <div key={title} className="card p-5 md:p-6">
-              <div className="badge mb-3">{title}</div>
-              <p className="text-white/80">{desc}</p>
+      {/* CAPABILITIES */}
+      <section id="capabilities" className="container-pad mt-14 md:mt-16">
+        <h2 className="h2">Full-stack capabilities</h2>
+        <p className="text-white/75 mt-2 max-w-2xl">
+          End-to-end delivery — architecture, implementation, and operations — with clear ownership and measurable outcomes.
+        </p>
+        <div className="grid md:grid-cols-3 gap-4 md:gap-6 mt-6">
+          {capabilities.map((c)=>(
+            <div key={c.title} className="card p-5 md:p-6 lift">
+              <div className="badge mb-3">{c.title}</div>
+              <ul className="list-disc list-inside text-white/85 space-y-2">
+                {c.points.map((p)=> <li key={p}>{p}</li>)}
+              </ul>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* STACK */}
+      <section className="container-pad mt-14 md:mt-16">
+        <div className="card p-6 md:p-8 grid-bg">
+          <h3 className="h3">Preferred stack</h3>
+          <p className="text-white/70 mt-2">Modern, proven technologies – selected for fit and longevity.</p>
+          <div className="flex flex-wrap gap-2 mt-4">
+            {stack.map((s)=>(<span key={s} className="chip border-white/10 bg-white/5 text-white/85">{s}</span>))}
+          </div>
+        </div>
+      </section>
+
+      {/* PROCESS */}
+      <section id="process" className="container-pad mt-14 md:mt-16">
+        <h2 className="h2">Delivery process</h2>
+        <div className="grid md:grid-cols-3 gap-4 md:gap-6 mt-6">
+          {process.map((s)=>(
+            <div key={s.t} className="card p-5 md:p-6">
+              <div className="badge mb-3">{s.t}</div>
+              <p className="text-white/80">{s.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="container-pad mt-14 md:mt-16">
+        <div className="card p-8 md:p-12 text-center lift grid-bg">
+          <h3 className="h3">Book a working session</h3>
+          <p className="text-white/70 mt-2">Bring your constraints and success metrics. Leave with a concrete plan and timeline.</p>
+          <div className="mt-5 flex justify-center">
+            <BookCall />
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="container-pad mt-14 md:mt-20 mb-16 md:mb-24">
+        <h2 className="h2">FAQ</h2>
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6 mt-6">
+          <div className="card p-5">
+            <div className="h3 mb-2">How do you keep quality high under speed?</div>
+            <p className="text-white/80">
+              Trunk-based development, CI/CD, code owners, static analysis, and automated tests (unit, integration, e2e).
+              Each merge ships behind feature flags with health checks and rollbacks.
+            </p>
+          </div>
+          <div className="card p-5">
+            <div className="h3 mb-2">What about security and compliance?</div>
+            <p className="text-white/80">
+              Threat modelling per feature, least-privilege IAM, secret rotation, encryption in transit/at rest,
+              audit logs, and dependency scanning. POPIA/SOC 2-friendly practices and documentation.
+            </p>
+          </div>
+          <div className="card p-5">
+            <div className="h3 mb-2">Do you hand over maintainable systems?</div>
+            <p className="text-white/80">
+              Yes. Clean repos, architecture docs, runbooks, dashboards, and onboarding guides so your team can own it.
+            </p>
+          </div>
+          <div className="card p-5">
+            <div className="h3 mb-2">When do we see progress?</div>
+            <p className="text-white/80">
+              First demo typically within 1–2 weeks. Weekly demos thereafter with measurable outcomes.
+            </p>
+          </div>
         </div>
       </section>
 

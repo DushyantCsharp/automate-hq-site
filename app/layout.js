@@ -1,51 +1,29 @@
+// app/layout.js
 import "./globals.css";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// ✅ Correct metadata (no themeColor here)
 export const metadata = {
-  metadataBase: new URL("https://automatehq.dev"), // swap with your live domain
-  title: {
-    default: "Automate HQ — Custom Software Architect",
-    template: "%s — Automate HQ",
-  },
+  title: { default: "Automate-HQ — Full-Stack Product Engineering", template: "%s — Automate-HQ" },
   description:
-    "Full-Stack Developer | Python, JavaScript (React), C#, C++ | Builder of scalable, high-performance systems. AI & automation, web & mobile apps, enterprise integrations.",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "Automate HQ — Custom Software Architect",
-    description:
-      "High-performance, scalable systems. AI & automation, web & mobile apps, enterprise integrations.",
-    url: "https://automatehq.dev",
-    siteName: "Automate HQ",
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: "Automate HQ — Custom Software Architect",
-    description:
-      "High-performance, scalable systems. AI & automation, web & mobile apps, enterprise integrations.",
-  },
-};
-
-// ✅ New viewport export for theme color + responsiveness
-export const viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#0b0d13" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0d13" },
-  ],
-  width: "device-width",
-  initialScale: 1,
+    "We design, build, and operate full-stack systems end-to-end — from React/Next.js front-ends and mobile to domain-driven back-ends, cloud, data, and AI. Production-ready from day one.",
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Calendly styles for the popup */}
+        <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+      </head>
+      <body className={inter.className}>
+        {/* Calendly widget JS for popup (no redirect) */}
+        <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="beforeInteractive" />
+        {children}
+      </body>
     </html>
   );
 }
