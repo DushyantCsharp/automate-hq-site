@@ -2,30 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---- Theme ---- */
-:root {
-  --bg: #0b0d13;
-  --card: #0f1420;
+/* ===== THEME ===== */
+:root{
+  --bg:#0a0c12;
+  --surface:#0f1420;
+  --text:#e7e9ee;
+  --muted:#a1a1b0;
+  --brand:#6a5bff;   /* electric indigo */
+  --brand-2:#00d0ff; /* electric cyan */
 }
 
-html, body {
-  height: 100%;
+html,body{
+  height:100%;
+  color:var(--text);
   background:
-    radial-gradient(1200px 600px at 70% -10%, rgba(74,110,255,.15), transparent 50%),
-    radial-gradient(800px 400px at 20% 0%, rgba(36,62,204,.2), transparent 50%),
-    var(--bg);
-  color: white;
+    radial-gradient(1200px 600px at 70% -10%, rgba(106,91,255,.16), transparent 55%),
+    radial-gradient(800px 400px at 20% 0%, rgba(0,208,255,.12), transparent 55%),
+    linear-gradient(180deg, var(--bg) 0%, #0b1020 40%, #0b0f18 100%);
+}
+*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{@apply transition}
+a:hover{opacity:.94}
+
+.container-pad{@apply mx-auto max-w-7xl px-5 sm:px-6}
+
+/* ===== CARDS / GLASS ===== */
+.card{
+  @apply rounded-2xl border border-white/5 shadow-[0_0_0_1px_rgba(255,255,255,0.03)];
+  background-color: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(10px);
+}
+.card-contrast{
+  @apply rounded-2xl border border-white/10;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
 }
 
-.container-pad { @apply mx-auto max-w-6xl px-6; }
+/* ===== TYPE ===== */
+.h1{@apply text-[34px] sm:text-5xl md:text-6xl font-semibold tracking-tight; letter-spacing:-.02em}
+.h2{@apply text-2xl md:text-3xl font-semibold; letter-spacing:-.01em}
+.h3{@apply text-xl md:text-2xl font-semibold}
+.lead{@apply text-base md:text-lg text-white/85}
 
-.card {
-  @apply rounded-2xl backdrop-blur border border-white/5 shadow-[0_0_0_1px_rgba(255,255,255,0.02)];
-  background-color: rgb(15 20 32 / 0.9);
-  background-color: color-mix(in srgb, var(--card) 90%, transparent);
+/* ===== BADGE ===== */
+.badge{
+  @apply inline-flex items-center gap-2 px-3 py-1 text-sm rounded-full border;
+  border-color:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.92);
 }
 
-.h1 { @apply text-4xl md:text-6xl font-semibold tracking-tight; }
-.h2 { @apply text-2xl md:text-3xl font-semibold; }
-.badge { @apply inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-sm text-white/80 border border-white/10; }
-a { @apply transition; }
+/* ===== BUTTONS ===== */
+.btn{@apply inline-flex items-center justify-center px-5 py-3 rounded-xl font-medium border border-white/10; background:#141a2a}
+.btn:hover{@apply border-white/20}
+.btn-primary{
+  background:linear-gradient(135deg, var(--brand), var(--brand-2));
+  border:none; color:#fff; box-shadow:0 10px 30px rgba(0,208,255,.14)
+}
+.btn-primary:active{transform:translateY(1px)}
+.btn-ghost{background:transparent}
+
+/* ===== INPUTS / CHIPS ===== */
+.lbl{@apply block text-sm text-white/70 mb-1}
+.in{@apply w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none}
+.in:focus{@apply border-white/20 ring-1 ring-white/20}
+.in::placeholder{color:rgba(255,255,255,.45)}
+.chip{
+  @apply inline-flex items-center justify-center px-3 py-1.5 rounded-full border text-sm font-medium
+         transition focus:outline-none focus:ring-2 focus:ring-white/20 active:scale-[.99];
+}
+
+/* ===== MOTION ===== */
+@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+.lift{transition:transform .25s ease, box-shadow .25s ease}
+.lift:hover{transform:translateY(-3px); box-shadow:0 14px 40px rgba(0,0,0,.28)}
+
+/* ===== GRID BACKDROP ===== */
+.grid-bg{position:relative;overflow:hidden}
+.grid-bg::before{
+  content:""; position:absolute; inset:-1px; z-index:-1;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)) border-box;
+  mask: linear-gradient(#000,#000) padding-box, linear-gradient(#000,#000);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.grid-bg::after{
+  content:""; position:absolute; inset:0; z-index:-2; opacity:.35;
+  background-image:
+    linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px;
+  background-position: center;
+}
+
+/* ===== HERO GLOWS ===== */
+.hero{position:relative; overflow:hidden}
+.glow{position:absolute; filter:blur(48px); opacity:.55}
+.glow-a{top:-140px; right:-120px; width:360px; height:360px; background:radial-gradient(closest-side, rgba(106,91,255,.38), transparent); animation:floaty 6s ease-in-out infinite}
+.glow-b{bottom:-140px; left:-80px; width:300px; height:300px; background:radial-gradient(closest-side, rgba(0,208,255,.30), transparent); animation:floaty 7.5s ease-in-out infinite}
+
+/* ===== SIMPLE IN-VIEW ANIM ===== */
+@keyframes fadeUp{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)}}
+.animate-in{animation:fadeUp .35s ease both}

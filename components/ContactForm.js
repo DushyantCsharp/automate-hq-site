@@ -1,120 +1,83 @@
+// components/ContactForm.js
 "use client";
+import { useState } from "react";
 
-import { useMemo, useState } from "react";
+async function safeJson(res) {
+  const ct = res.headers.get("content-type") || "";
+  const text = await res.text();
+  if (ct.includes("application/json")) {
+    try { return JSON.parse(text); } catch { return { ok: false, error: "Invalid JSON payload" }; }
+  }
+  // HTML or something else (the '<!DOCTYPE' error case)
+  return { ok: false, error: `Unexpected response: ${text.slice(0, 120)}...` };
+}
 
 export default function ContactForm() {
-  const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState({ sending: false, ok: null, error: "" });
+  const [status, setStatus] = useState({ ok: null, error: "", loading: false });
 
-  // simple honeypot to block bots
-  const [hp, setHp] = useState("");
-  const disabled = useMemo(() => status.sending || hp.length > 0, [status.sending, hp]);
-
-  const submit = async (e) => {
+  async function onSubmit(e) {
     e.preventDefault();
-    if (disabled) return;
+    setStatus({ ok: null, error: "", loading: true });
+    const data = Object.fromEntries(new FormData(e.currentTarget).entries());
 
-    setStatus({ sending: true, ok: null, error: "" });
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, company, email, message }),
+        body: JSON.stringify(data),
       });
-
-      const data = await res.json();
-      if (!res.ok || !data.ok) throw new Error(data.error || "Failed to send");
-
-      setStatus({ sending: false, ok: true, error: "" });
-      setName(""); setCompany(""); setEmail(""); setMessage("");
+      const json = await safeJson(res);
+      if (!res.ok || !json.ok) throw new Error(json.error || `HTTP ${res.status}`);
+      setStatus({ ok: true, error: "", loading: false });
+      e.currentTarget.reset();
     } catch (err) {
-      setStatus({ sending: false, ok: false, error: err.message || "Error" });
+      setStatus({ ok: false, error: err.message, loading: false });
     }
-  };
+  }
 
   return (
-    <form onSubmit={submit} className="space-y-4">
-      {/* Honeypot (hidden) */}
-      <input
-        type="text"
-        value={hp}
-        onChange={(e) => setHp(e.target.value)}
-        className="hidden"
-        tabIndex={-1}
-        autoComplete="off"
-      />
+    <form onSubmit={onSubmit} className="card p-6 md:p-7 space-y-4 animate-in">
+      <input type="text" name="hp" className="hidden" tabIndex={-1} autoComplete="off" />
+      <div className="grid md:grid-cols-2 gap-4">
+        <div>
+          <label className="lbl">Your name</label>
+          <input name="name" className="in" required autoComplete="name" />
+        </div>
+        <div>
+          <label className="lbl">Email</label>
+          <input type="email" name="email" className="in" required autoComplete="email" />
+        </div>
+      </div>
 
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-white/70 mb-1">Name</label>
-          <input
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:ring-2 focus:ring-brand-600"
-            placeholder="Your name"
-          />
+          <label className="lbl">Budget (ZAR)</label>
+          <select name="budget" className="in">
+            <option>R10k–R30k</option><option>R30k–R75k</option>
+            <option>R75k–R150k</option><option>R150k+</option>
+          </select>
         </div>
         <div>
-          <label className="block text-sm text-white/70 mb-1">Company</label>
-          <input
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:ring-2 focus:ring-brand-600"
-            placeholder="(Optional)"
-          />
+          <label className="lbl">Timeline</label>
+          <select name="timeline" className="in">
+            <option>ASAP</option><option>This month</option>
+            <option>1–3 months</option><option>Flexible</option>
+          </select>
         </div>
-        <div className="md:col-span-2">
-          <label className="block text-sm text-white/70 mb-1">Email</label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:ring-2 focus:ring-brand-600"
-            placeholder="you@company.com"
-          />
-        </div>
-        <div className="md:col-span-2">
-          <label className="block text-sm text-white/70 mb-1">What do you need built?</label>
-          <textarea
-            required
-            rows={6}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 outline-none focus:ring-2 focus:ring-brand-600"
-            placeholder="Tell me about your problem, goals, timeline, and budget."
-          />
-        </div>
+      </div>
+
+      <div>
+        <label className="lbl">Project details</label>
+        <textarea name="project" rows={6} className="in" placeholder="What are we building? Goals, users, key features…" required />
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={disabled}
-          className="rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-60 transition px-6 py-3 font-medium"
-        >
-          {status.sending ? "Sending..." : "Send Enquiry"}
+        <button disabled={status.loading} className="btn btn-primary">
+          {status.loading ? "Sending…" : "Send inquiry"}
         </button>
-
-        {/* Mailto fallback if someone prefers */}
-        <a
-          href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_FALLBACK || "Dushyannana@gmail.com"}?subject=${encodeURIComponent("Automate HQ — Project Enquiry")}`}
-          className="rounded-xl border border-white/10 hover:border-white/20 px-5 py-3 font-medium"
-        >
-          Email me instead
-        </a>
+        {status.ok && <span className="hint ok">Thanks — I’ll reply shortly.</span>}
+        {status.ok === false && <span className="hint err">Couldn’t send: {status.error}</span>}
       </div>
-
-      {status.ok && (
-        <p className="text-sm text-emerald-400">Thanks — your message was sent. I’ll reply shortly.</p>
-      )}
-      {status.ok === false && (
-        <p className="text-sm text-rose-400">Couldn’t send: {status.error}</p>
-      )}
     </form>
   );
 }
