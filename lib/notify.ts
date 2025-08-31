@@ -1,0 +1,9 @@
+import { Resend } from "resend";
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const to = process.env.NOTIFY_TO!;
+const from = process.env.NOTIFY_FROM || "notifications@example.com";
+const slackWebhook = process.env.SLACK_WEBHOOK_URL;
+function escapeHtml(s: string){ return s.replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c] as string)); }
+export async function notifyByEmail(subject:string, html:string){ if(!resend||!to) return {ok:false,error:"Email not configured"}; const r=await resend.emails.send({to,from,subject,html}); return {ok:!(r as any).error, error:(r as any).error?.message}; }
+export async function notifySlack(text:string){ if(!slackWebhook) return {ok:false,skipped:true}; const res=await fetch(slackWebhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text})}); return {ok:res.ok}; }
+export async function notifyContact(payload:{name:string; email:string; company?:string; useCase?:string; message?:string;}){ const time=new Date().toLocaleString("en-ZA",{timeZone:"Africa/Johannesburg"}); const subject=`Contact — ${payload.name} (${payload.email})`; const html=`<h2>Contact Form</h2><p><b>When:</b> ${escapeHtml(time)}</p><p><b>Name:</b> ${escapeHtml(payload.name)}</p><p><b>Email:</b> ${escapeHtml(payload.email)}</p><p><b>Company:</b> ${escapeHtml(payload.company||"—")}</p><p><b>Use Case:</b> ${escapeHtml(payload.useCase||"—")}</p><p><b>Message:</b><br/>${escapeHtml(payload.message||"—")}</p>`; const slack=`📩 *Contact*\\n• *Name:* ${payload.name}\\n• *Email:* ${payload.email}\\n• *Company:* ${payload.company||"—"}\\n• *Use case:* ${payload.useCase||"—"}\\n• *Message:* ${payload.message||"—"}`; const [e,s]=await Promise.all([notifyByEmail(subject,html),notifySlack(slack)]); return {email:e,slack:s}; }

@@ -1,0 +1,1 @@
+export default async function sitemap(){const base="https://www.automate-hq.co.za";const routes=["","solutions","industries","technology","pricing","resources","about","contact","legal/privacy","legal/terms","legal/cookies"];return routes.map((r)=>({url:`${base}/${r}`,lastModified:new Date()}));}

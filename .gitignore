@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # dependencies
 node_modules/
 
@@ -21,3 +22,11 @@ pnpm-debug.log*
 
 # misc
 coverage/
+=======
+node_modules
+.next
+.env*
+.DS_Store
+out
+dist
+>>>>>>> b5b3167 (feat: Full update)
