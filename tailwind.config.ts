@@ -1,2 +1,46 @@
 import type { Config } from "tailwindcss";
-export default { darkMode:"class", content:["./app/**/*.{ts,tsx}","./components/**/*.{ts,tsx}"], theme:{ extend:{ colors:{ ink:{900:"#0B0B0B",800:"#111111",700:"#161616",600:"#1C1C1C"}}, borderRadius:{ xl2:"1.25rem", pill:"999px"}, keyframes:{ shimmer:{"100%":{transform:"translateX(100%)"}}, marquee:{"0%":{transform:"translateX(0)"},"100%":{transform:"translateX(-50%)"}}, fadeUp:{"0%":{opacity:0, transform:"translateY(16px)"},"100%":{opacity:1, transform:"translateY(0)"}}, scaleIn:{"0%":{opacity:0, transform:"scale(.98)"},"100%":{opacity:1, transform:"scale(1)"}}}, animation:{ shimmer:"shimmer 1.8s linear infinite", marquee:"marquee 28s linear infinite", fadeUp:"fadeUp .6s ease-out both", scaleIn:"scaleIn .4s ease-out both"}, boxShadow:{ subtle:"0 1px 0 rgba(0,0,0,.06)", cardLight:"0 10px 30px rgba(0,0,0,.06)", cardDark:"0 10px 40px rgba(0,0,0,.55)"}}}, plugins:[] } satisfies Config;
+
+export default {
+  darkMode: "class",
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        ink: { 900: "#0B0B0B", 800: "#111111", 700: "#161616", 600: "#1C1C1C" },
+      },
+      borderRadius: {
+        xl2: "1.25rem", // custom size
+        pill: "999px",
+      },
+      keyframes: {
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        fadeUp: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        scaleIn: {
+          "0%": { opacity: "0", transform: "scale(.98)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+      },
+      animation: {
+        shimmer: "shimmer 1.8s linear infinite",
+        marquee: "marquee 28s linear infinite",
+        fadeUp: "fadeUp .6s ease-out both",
+        scaleIn: "scaleIn .4s ease-out both",
+      },
+      boxShadow: {
+        subtle: "0 1px 0 rgba(0,0,0,.06)",
+        cardLight: "0 10px 30px rgba(0,0,0,.06)",
+        cardDark: "0 10px 40px rgba(0,0,0,.55)",
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config;
